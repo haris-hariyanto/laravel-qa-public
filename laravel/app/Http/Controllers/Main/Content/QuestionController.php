@@ -84,14 +84,16 @@ class QuestionController extends Controller
             // [4]
             // Answers
             $answers = [];
+            $answerOrder = 1;
             $questionAnswers = json_decode($question->answers_cached, true);
             foreach ($questionAnswers as $answer) {
                 $answerModel = new Answer();
-                $answerModel->id = $answer['id'];
+                $answerModel->id = $answerOrder;
                 $answerModel->answer = $answer['answer'];
                 $answerModel->is_best = $answer['is_best'];
                 $answerModel->vote = $answer['vote'];
                 $answers[] = $answerModel;
+                $answerOrder++;
             }
             // [END] Answers
 
