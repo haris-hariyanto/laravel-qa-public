@@ -30,22 +30,29 @@ class CreateCache extends Command
      */
     public function handle()
     {
-        $loop = true;
-        $lastID = false;
+        $parallerMode = $this->confirm('Jalankan caching paralel?', false);
+        if ($parallerMode) {
+            $lastID = $this->ask('Set ID pertama', 0);
+        }
+        else {
+            $lastID = false;
 
-        $lastCachedContent = ContentCache::orderBy('id', 'desc')->first();
-        if ($lastCachedContent) {
-            $question = Question::where('slug', $lastCachedContent->slug)->first();
-            if ($question) {
-                $lastID = $question->id;
+            $lastCachedContent = ContentCache::orderBy('id', 'desc')->first();
+            if ($lastCachedContent) {
+                $question = Question::where('slug', $lastCachedContent->slug)->first();
+                if ($question) {
+                    $lastID = $question->id;
+                }
+                else {
+                    $lastID = false;
+                }
             }
             else {
                 $lastID = false;
             }
         }
-        else {
-            $lastID = false;
-        }
+
+        $loop = true;
 
         while ($loop) {
             if ($lastID) {
