@@ -1,0 +1,174 @@
+<?php
+
+namespace {{ controllerNamespace }};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Helpers\Permission;
+use App\Models\{{ modelName }};
+
+class {{ modelName }}Controller extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('{{ resourceName }}') => '',
+        ];
+
+        return view('{{ viewPath }}.index', compact('breadcrumb'));
+    }
+
+    public function indexData(Request $request)
+    {
+        $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        $queryLimit = $request->query('limit', 10);
+        $queryOffset = $request->query('offset', 0);
+        $querySort = $request->query('sort', 'id');
+        $queryOrder = $request->query('order', 'desc');
+        $querySearch = $request->query('search');
+
+        ${{ modelInstancePlural }}Count = {{ modelName }}::count();
+
+        ${{ modelInstancePlural }} = {{ modelName }}::when($querySearch, function ($query) use ($querySearch) {
+            // $query->where('name', 'like', '%' . $querySearch . '%');
+        });
+        ${{ modelInstancePlural }}CountFiltered = ${{ modelInstancePlural }}->count();
+
+        ${{ modelInstancePlural }} = ${{ modelInstancePlural }}->orderBy($querySort, $queryOrder)
+            ->skip($queryOffset)
+            ->take($queryLimit)
+            ->get();
+
+        return [
+            'total' => ${{ modelInstancePlural }}CountFiltered,
+            'totalNotFiltered' => ${{ modelInstancePlural }}Count,
+            'rows' => ${{ modelInstancePlural }}->map(function (${{ modelInstance }}) use ($userAuth) {
+                return [
+                    'id' => ${{ modelInstance }}->id,
+                    {{ JSONData }}
+                    'menu' => view('{{ viewPath }}._menu', ['{{ modelInstance }}' => ${{ modelInstance }}, 'userAuth' => $userAuth])->render(),
+                ];
+            }),
+        ];
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('{{ resourceName }}') => route('{{ route }}.index'),
+            __('Create {{ resourceName }}') => '',
+        ];
+
+        return view('{{ viewPath }}.create', compact('breadcrumb'));
+    }
+
+    /**
+     * Store a newly created resource in a storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        $validated = $request->validate([
+            {{ validationCreate }}
+        ]);
+
+        {{ modelName }}::create($validated);
+
+        return redirect()->route('{{ route }}.index')->with('success', __('{{ resourceNameSingular }} has been created!'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\{{ modelName }} ${{ modelInstance}}
+     * @return \Illuminate\Http\Response
+     */
+    public function show({{ modelName }} ${{ modelInstance }})
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        return redirect()->route('{{ route }}.index');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     * @param  \App\Models\{{ modelName }} ${{ modelInstance }}
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, {{ modelName }} ${{ modelInstance }})
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        $breadcrumb = [
+            __('Dashboard') => route('admin.index'),
+            __('{{ resourceName }}') => route('{{ route }}.index'),
+            __('Edit {{ resourceName }}') => '',
+        ];
+
+        return view('{{ viewPath }}.edit', compact('{{ modelInstance }}', 'breadcrumb'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\{{ modelName }} ${{ modelInstance }}
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, {{ modelName }} ${{ modelInstance }})
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        $validated = $request->validate([
+            {{ validationEdit }}
+        ]);
+
+        ${{ modelInstance }}->update($validated);
+
+        return redirect()->route('{{ route }}.edit', ['{{ modelInstance }}' => ${{ modelInstance }}])->with('success', __('{{ resourceNameSingular }} has been updated!'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\{{ modelName }} ${{ modelInstance }}
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, {{ modelName }} ${{ modelInstance }})
+    {
+        // $userAuth = new Permission($request->user()->group, 'admin');
+        // $this->authorize('auth-check', $userAuth->authorize(''));
+
+        ${{ modelInstance }}->delete();
+
+        return redirect()->back()->with('success', __('{{ resourceNameSingular }} has been deleted!'));
+    }
+}

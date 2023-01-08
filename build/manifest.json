@@ -1,0 +1,33 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app.c36a5768.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_module.esm.97f3aa2e.js"
+    ],
+    "css": [
+      "assets/app.d01964bf.css"
+    ]
+  },
+  "resources/js/admin.js": {
+    "file": "assets/admin.2e877f52.js",
+    "src": "resources/js/admin.js",
+    "isEntry": true,
+    "imports": [
+      "_module.esm.97f3aa2e.js"
+    ]
+  },
+  "_module.esm.97f3aa2e.js": {
+    "file": "assets/module.esm.97f3aa2e.js"
+  },
+  "resources/css/tailwind.css": {
+    "file": "assets/tailwind.22c10a11.css",
+    "src": "resources/css/tailwind.css",
+    "isEntry": true
+  },
+  "resources/js/app.css": {
+    "file": "assets/app.d01964bf.css",
+    "src": "resources/js/app.css"
+  }
+}

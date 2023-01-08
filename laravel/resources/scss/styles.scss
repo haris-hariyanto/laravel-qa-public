@@ -1,0 +1,32 @@
+$container-padding-x: 1rem;
+$link-decoration: none;
+$link-hover-decoration: underline;
+
+$white: #fff;
+
+@import "~bootstrap/scss/bootstrap";
+
+[x-cloak] {
+    display: none !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+a.footer-link {
+    color: rgba($white, .55);
+    &:hover {
+        color: rgba($white, .75);
+    }
+}
+
+p.footer-copyright {
+    color: rgba($white, .55);
+}
+
+/* Custom */
+
+a.badge:hover {
+    text-decoration: none;
+}

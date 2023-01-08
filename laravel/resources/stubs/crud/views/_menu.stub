@@ -1,0 +1,20 @@
+<div class="dropdown">
+    <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{{ __('Menu') }}</button>
+    <div class="dropdown-menu">
+        @can('auth-check', $userAuth->authorize('can-do-something'))
+        @endcan
+        <a href="{{ route('{{ route }}.edit', ['{{ modelInstance }}' => ${{ modelInstance }}]) }}" class="dropdown-item">{{ __('Edit') }}</a>
+
+        @can('auth-check', $userAuth->authorize('can-do-something'))
+        @endcan
+        <button
+            type="button"
+            class="dropdown-item"
+            data-toggle="modal"
+            data-target="#modalDelete"
+            data-link-delete="{{ route('{{ route }}.destroy', ['{{ modelInstance }}' => ${{ modelInstance }}]) }}"
+            data-name="{{ ${{ modelInstance }}->name }}"
+            @click="deleteItem"
+        >{{ __('Delete') }}</button>
+    </div>
+</div>
