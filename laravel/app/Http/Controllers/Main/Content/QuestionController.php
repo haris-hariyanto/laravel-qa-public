@@ -73,7 +73,6 @@ class QuestionController extends Controller
             $isCached = false;
 
             $question = Question::where('slug', $question)->first();
-            dd('OK');
             if (!$question) {
                 return redirect()->route('index');
             }
@@ -82,6 +81,7 @@ class QuestionController extends Controller
             $grade = $question->grade;
             $answers = $question->answers;
 
+            /*
             // Get related questions
             $recommendations = Recommendation::where('parent_id', $question->id)->count();
             if ($recommendations >= config('content.related_questions')) {
@@ -113,6 +113,8 @@ class QuestionController extends Controller
                 }
             }
             // [END] Get related questions
+            */
+            $relatedQuestions = [];
         }
 
         $pageTitle = Text::plain($question->question, 100, true);
