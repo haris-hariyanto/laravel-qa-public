@@ -117,7 +117,7 @@ class SaveContents extends Command
                 'subject_id' => $subject->id,
                 'grade_id' => $grade->id,
                 'vote' => rand(1, 100),
-                'answers' => json_encode($answersToSave), // [2]
+                'answers_cached' => json_encode($answersToSave), // [2]
             ]);
             $slugID = $question->id;
             $slugID += 1;

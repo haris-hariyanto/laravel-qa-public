@@ -84,7 +84,7 @@ class QuestionController extends Controller
             // [4]
             // Answers
             $answers = [];
-            $questionAnswers = json_decode($question->answer, true);
+            $questionAnswers = json_decode($question->answers_cached, true);
             foreach ($questionAnswers as $answer) {
                 $answerModel = new Answer();
                 $answerModel->id = $answer['id'];
