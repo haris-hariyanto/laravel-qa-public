@@ -79,7 +79,7 @@ class QuestionController extends Controller
 
             $subject = $question->subject;
             $grade = $question->grade;
-            $answers = []; // $question->answers;
+            $answers = $question->answers;
 
             /*
             // Get related questions
@@ -114,12 +114,14 @@ class QuestionController extends Controller
             }
             // [END] Get related questions
             */
+
             $relatedQuestions = [];
         }
 
         $pageTitle = Text::plain($question->question, 100, true);
         $pageTitle = ucwords($pageTitle);
 
+        /*
         // Get internal links
         $internalLinks = Question::where('id', '<', $question->id)
             ->take(config('content.related_questions'))
@@ -134,6 +136,9 @@ class QuestionController extends Controller
                 ->get();
         }
         // [END] Get internal links
+        */
+
+        $internalLinks = [];
 
         // Generate meta data
         $metaData = new MetaData();
