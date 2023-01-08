@@ -73,6 +73,7 @@ class QuestionController extends Controller
             $isCached = false;
 
             $question = Question::where('slug', $question)->first();
+            dd();
             if (!$question) {
                 return redirect()->route('index');
             }
