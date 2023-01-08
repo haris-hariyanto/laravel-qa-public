@@ -132,8 +132,6 @@ class QuestionController extends Controller
         }
         // [END] Get internal links
 
-        $internalLinks = [];
-
         // Generate meta data
         $metaData = new MetaData();
         if ($isCached) {
