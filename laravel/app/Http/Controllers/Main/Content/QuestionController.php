@@ -79,7 +79,21 @@ class QuestionController extends Controller
 
             $subject = $question->subject;
             $grade = $question->grade;
-            $answers = $question->answers;
+            // $answers = $question->answers; [3]
+
+            // [4]
+            // Answers
+            $answers = [];
+            $questionAnswers = json_decode($question->answer);
+            foreach ($questionAnswers as $answer) {
+                $answerModel = new Answer();
+                $answerModel->id = $answer['id'];
+                $answerModel->answer = $answer['answer'];
+                $answerModel->is_best = $answer['is_best'];
+                $answerModel->vote = $answer['vote'];
+                $answers[] = $answerModel;
+            }
+            // [END] Answers
 
             // Get related questions
             $recommendations = Recommendation::where('parent_id', $question->id)->count();
@@ -89,10 +103,11 @@ class QuestionController extends Controller
                     ->take(config('content.related_questions'))
                     ->pluck('child_id')
                     ->toArray();
-                $relatedQuestions = Question::with('answers')->whereIn('id', $recommendations)->get();
+                // $relatedQuestions = Question::with('answers')->whereIn('id', $recommendations)->get();
+                $relatedQuestions = Question::with([])->whereIn('id', $recommendations)->get();
             }
             else {
-                $relatedQuestions = Question::with('answers')
+                $relatedQuestions = Question::with([]) // Question::with('answers')
                     ->where('subject_id', $subject->id)
                     ->where('grade_id', $grade->id)
                     ->where('id', '<', $question->id)
@@ -102,7 +117,7 @@ class QuestionController extends Controller
 
                 $relatedQuestionsCount = count($relatedQuestions);
                 if ($relatedQuestionsCount < config('content.related_questions')) {
-                    $relatedQuestions = Question::with('answers')
+                    $relatedQuestions = Question::with([]) // Question::with('answers') // [5]
                         ->where('subject_id', $subject->id)
                         ->where('grade_id', $grade->id)
                         ->where('id', '>', $question->id)

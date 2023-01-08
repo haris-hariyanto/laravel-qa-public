@@ -133,20 +133,8 @@ class ImportContentsBulk extends Command
                 $slug = substr($slug, 0, 70);
             }
             $slug = Str::slug($slugID . ' ' . $slug);
-            
-            $question = Question::create([
-                'user_id' => 2,
-                'slug' => $slug,
-                'question' => html_entity_decode($content['question']),
-                'subject_id' => $subject->id,
-                'grade_id' => $grade->id,
-                'vote' => rand(1, 100),
-            ]);
-            $slugID = $question->id;
-            $slugID += 1;
 
-            $lastQuestion = $content['question'];
-
+            // Answer
             $answersToSave = [];
             $count = 1;
             foreach ($content['answers'] as $answer) {
@@ -159,6 +147,21 @@ class ImportContentsBulk extends Command
 
                 $count++;
             }
+            // [END] Answer
+            
+            $question = Question::create([
+                'user_id' => 2,
+                'slug' => $slug,
+                'question' => html_entity_decode($content['question']),
+                'subject_id' => $subject->id,
+                'grade_id' => $grade->id,
+                'vote' => rand(1, 100),
+                'answers' => json_encode($answersToSave), // [2]
+            ]);
+            $slugID = $question->id;
+            $slugID += 1;
+
+            $lastQuestion = $content['question'];
 
             $question->answers()->createMany($answersToSave);
 

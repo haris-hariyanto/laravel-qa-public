@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('have_recommendations', ['Y', 'N'])->default('N');
             $table->timestamp('recommendation_time')->nullable();
             $table->enum('index_requested', ['Y', 'N'])->default('N');
+            $table->text('answers')->nullable(); // [1]
             $table->timestamps();
         });
     }
