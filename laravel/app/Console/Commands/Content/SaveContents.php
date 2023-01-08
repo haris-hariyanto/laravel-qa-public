@@ -94,6 +94,21 @@ class SaveContents extends Command
                 $slug = substr($slug, 0, 70);
             }
             $slug = Str::slug($slugID . ' ' . $slug);
+
+            // Answer
+            $answersToSave = [];
+            $count = 1;
+            foreach ($content['answers'] as $answer) {
+                $answersToSave[] = [
+                    'user_id' => $count + 2,
+                    'answer' => html_entity_decode($answer),
+                    'is_best' => $count == 1 ? 'Y' : 'N',
+                    'vote' => $count == 1 ? rand(51, 100) : rand(1, 50),
+                ];
+
+                $count++;
+            }
+            // [END] Answer
             
             $question = Question::create([
                 'user_id' => 2,
@@ -102,6 +117,7 @@ class SaveContents extends Command
                 'subject_id' => $subject->id,
                 'grade_id' => $grade->id,
                 'vote' => rand(1, 100),
+                'answers' => json_encode($answersToSave), // [2]
             ]);
             $slugID = $question->id;
             $slugID += 1;
