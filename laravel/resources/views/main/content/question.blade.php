@@ -77,10 +77,10 @@
                         <div class="col-10 col-lg-11">
                             <h3 class="fs-6 mb-2">{{ __('Answers') }}</h3>
 
-                            @foreach ($relatedQuestion->answers as $relatedQuestionAnswer)
+                            @foreach (json_decode($relatedQuestion->answers_cached, true) as $relatedQuestionAnswer)
                                 <div class="card mb-2">
                                     <div class="card-body">
-                                        {!! strip_tags(str_replace(['&lt;', '&gt;'], ['<', '>'], htmlspecialchars($relatedQuestionAnswer->answer)), config('content.allowed_tags')) !!}
+                                        {!! strip_tags(str_replace(['&lt;', '&gt;'], ['<', '>'], htmlspecialchars($relatedQuestionAnswer['answer'])), config('content.allowed_tags')) !!}
                                     </div>
                                 </div>
                             @endforeach
