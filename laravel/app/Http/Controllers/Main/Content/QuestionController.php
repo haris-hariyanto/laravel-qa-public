@@ -79,7 +79,7 @@ class QuestionController extends Controller
 
             $subject = $question->subject;
             $grade = $question->grade;
-            $answers = $question->answers;
+            $answers = []; // $question->answers;
 
             /*
             // Get related questions
